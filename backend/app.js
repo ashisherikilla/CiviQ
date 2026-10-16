@@ -8,11 +8,25 @@ import estimationRoutes from "./routes/estimationRoutes.js";
 
 const app = express();
 
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://civi-q-xi.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "https://civi-q-xi.vercel.app/",
+    origin: (origin, callback) => {
+      // Allow requests without an Origin header, such as Postman.
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked origin: ${origin}`));
+    },
   })
 );
+
 
 app.use(express.json());
 
